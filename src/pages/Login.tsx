@@ -1,20 +1,27 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/components/ui/use-toast";
-import { login } from '@/utils/auth';
+import { login, initializeUsers } from '@/utils/auth';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { InfoIcon } from "lucide-react";
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Initialize the test user on component mount
+    initializeUsers();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,6 +52,11 @@ const Login = () => {
     }
   };
 
+  const setTestUser = () => {
+    setEmail("test@example.com");
+    setPassword("password123");
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -57,7 +69,24 @@ const Login = () => {
                 Enter your credentials to access your account
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
+              <Alert className="bg-primary/10 border-primary/20">
+                <InfoIcon className="h-4 w-4" />
+                <AlertDescription className="text-sm">
+                  You can use the test account: <br />
+                  <strong>Email:</strong> test@example.com <br />
+                  <strong>Password:</strong> password123 <br />
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="mt-2" 
+                    onClick={setTestUser}
+                  >
+                    Fill test credentials
+                  </Button>
+                </AlertDescription>
+              </Alert>
+              
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>

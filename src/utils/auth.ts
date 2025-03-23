@@ -21,6 +21,23 @@ export const initializeUsers = () => {
   if (!localStorage.getItem(USERS_STORAGE_KEY)) {
     localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify([]));
   }
+  
+  // Check if users array exists, if not create it with a test user
+  const users = JSON.parse(localStorage.getItem(USERS_STORAGE_KEY) || '[]');
+  if (!localStorage.getItem(USERS_STORAGE_KEY) || users.length === 0) {
+    const testUser = {
+      id: "test123",
+      email: "test@example.com",
+      password: "password123",
+      firstName: "Test",
+      lastName: "User",
+      exams: ["exam1", "exam2"],
+      completedExams: [],
+      certificates: [],
+    };
+    
+    localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify([testUser]));
+  }
 };
 
 // Authentication functions
